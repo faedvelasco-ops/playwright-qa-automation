@@ -67,7 +67,10 @@ test.describe('Booking CRUD', () => {
     const response = await bookingApi.partialUpdate(id, { additionalneeds: 'Late checkout' }, authToken);
 
     expect(response.status()).toBe(200);
-    expect(await response.json()).toEqual({ ...payload, additionalneeds: 'Late checkout' });
+    expect(bookingSchema.parse(await response.json())).toEqual({
+      ...payload,
+      additionalneeds: 'Late checkout',
+    });
   });
 
   test('rejects updates without a token', { tag: ['@regression'] }, async ({ bookingApi }) => {
