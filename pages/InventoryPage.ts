@@ -1,6 +1,13 @@
 import { expect, type Locator, type Page } from '@playwright/test';
 
-export type SortOption = 'az' | 'za' | 'lohi' | 'hilo';
+export const sortOptions = {
+  az: 'Name (A to Z)',
+  za: 'Name (Z to A)',
+  lohi: 'Price (low to high)',
+  hilo: 'Price (high to low)',
+} as const;
+
+export type SortOption = keyof typeof sortOptions;
 
 /** Turns a product name into the slug SauceDemo uses in its data-test ids. */
 const slug = (productName: string) => productName.toLowerCase().replace(/\s+/g, '-');
@@ -8,6 +15,7 @@ const slug = (productName: string) => productName.toLowerCase().replace(/\s+/g, 
 export class InventoryPage {
   readonly title: Locator;
   readonly sortSelect: Locator;
+  readonly activeSortOption: Locator;
   readonly itemNames: Locator;
   readonly itemPrices: Locator;
   readonly cartLink: Locator;
@@ -16,6 +24,7 @@ export class InventoryPage {
   constructor(private readonly page: Page) {
     this.title = page.getByTestId('title');
     this.sortSelect = page.getByTestId('product-sort-container');
+    this.activeSortOption = page.getByTestId('active-option');
     this.itemNames = page.getByTestId('inventory-item-name');
     this.itemPrices = page.getByTestId('inventory-item-price');
     this.cartLink = page.getByTestId('shopping-cart-link');
@@ -27,8 +36,10 @@ export class InventoryPage {
     await expect(this.title).toHaveText('Products');
   }
 
+  /** Waits for the visible sort label to change, so the list is re-rendered before it is read. */
   async sortBy(option: SortOption) {
     await this.sortSelect.selectOption(option);
+    await expect(this.activeSortOption).toHaveText(sortOptions[option]);
   }
 
   async names(): Promise<string[]> {
