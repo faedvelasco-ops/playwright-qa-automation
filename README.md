@@ -2,6 +2,8 @@
 
 [![Playwright Tests](https://github.com/faedvelasco-ops/playwright-qa-automation/actions/workflows/playwright.yml/badge.svg)](https://github.com/faedvelasco-ops/playwright-qa-automation/actions/workflows/playwright.yml)
 
+**[Latest test report](https://faedvelasco-ops.github.io/playwright-qa-automation/)** (HTML report from the last run on `main`)
+
 UI and API test automation portfolio built with **Playwright + TypeScript**.
 It targets two public practice applications:
 
@@ -142,12 +144,12 @@ is uploaded as an artifact on every run.
 - UI login goes through the form on every test (fast on SauceDemo). See the roadmap
   for a `storageState` approach.
 
-## Optional: publish the report to GitHub Pages
+## Test report on GitHub Pages
 
-The workflow can deploy the latest `main` report to GitHub Pages. It is off by default:
-
-1. In the repository settings, set **Pages → Source** to **GitHub Actions**.
-2. Add a repository variable `DEPLOY_REPORT` with the value `true`.
+Every push to `main` publishes the HTML report to
+[GitHub Pages](https://faedvelasco-ops.github.io/playwright-qa-automation/), whether the run
+passed or failed. Pull requests only upload the report as a build artifact.
+For a fork, set **Settings → Pages → Source** to **GitHub Actions**.
 
 ## Roadmap
 
