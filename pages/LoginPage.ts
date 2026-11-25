@@ -1,0 +1,27 @@
+import { expect, type Locator, type Page } from '@playwright/test';
+import type { User } from '../data/users';
+
+export class LoginPage {
+  readonly username: Locator;
+  readonly password: Locator;
+  readonly loginButton: Locator;
+  readonly error: Locator;
+
+  constructor(private readonly page: Page) {
+    this.username = page.getByTestId('username');
+    this.password = page.getByTestId('password');
+    this.loginButton = page.getByRole('button', { name: 'Login' });
+    this.error = page.getByTestId('error');
+  }
+
+  async goto() {
+    await this.page.goto('/');
+    await expect(this.loginButton).toBeVisible();
+  }
+
+  async login({ username, password }: User) {
+    await this.username.fill(username);
+    await this.password.fill(password);
+    await this.loginButton.click();
+  }
+}
